@@ -1,19 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { ChakraProvider } from '@chakra-ui/react';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./utils/theme";
+import { BrowserRouter } from "react-router-dom";
+import { Provider as ReduxProvider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import adminReducer from "./features/adminSlice";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
+
+export const store = configureStore({
+  reducer: {
+    admin: adminReducer,
+  },
+});
+
 root.render(
-  <ChakraProvider>
-  <React.StrictMode>
-    <App />
-  </React.StrictMode></ChakraProvider>
+  <BrowserRouter>
+    <ReduxProvider store={store}>
+      <ChakraProvider theme={theme}>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </ChakraProvider>
+    </ReduxProvider>
+  </BrowserRouter>
 );
+
+export type RootState = ReturnType<typeof store.getState>;
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
