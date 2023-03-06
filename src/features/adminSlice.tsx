@@ -4,13 +4,13 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 export interface adminState {
   value: {
     tableNum: Number;
-    order: String;
+    order: Array<Number | String | Object>;
   };
 }
 const initialState: adminState = {
   value: {
-    tableNum: 1,
-    order: "food",
+    tableNum: 0,
+    order: [],
   },
 };
 
@@ -20,7 +20,10 @@ export const adminSlice = createSlice({
   reducers: {
     setValue: (
       state,
-      action: PayloadAction<{ tableNum: Number; order: String }>
+      action: PayloadAction<{
+        tableNum: Number;
+        order: Array<Number | String | Object>;
+      }>
     ) => {
       state.value = action.payload;
     },

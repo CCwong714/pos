@@ -1,43 +1,35 @@
 import React from "react";
 import logo from "./logo.svg";
-import "./App.css";
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./index";
-import { setValue } from "./features/adminSlice";
+import uuid from "react-uuid";
+import { setTable1 } from "./features/tableSlice";
+import OrderComponent from "./components/tableOrder/OrderComponent";
 
 function App() {
   const dispatch = useDispatch();
-  const admin = useSelector((state: RootState) => state.admin.value);
-  console.log(admin);
+  const table1 = useSelector((state: RootState) => state.table.table1.order);
+  console.log(table1);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Box>
-          <Text>123</Text>
-          <Button
-            backgroundColor="#00FF91"
-            onClick={() => {
-              dispatch(setValue({ tableNum: 2, order: "water" }));
-            }}
-          >
-            123
-          </Button>
-        </Box>
-      </header>
-    </div>
+    <Box>
+      <OrderComponent Name="watermalon" />
+      <OrderComponent Name="apple" />
+      <OrderComponent Name="orange" />
+      <Box>
+        {table1.map((item: any) => {
+          return (
+            <Box>
+              <>{console.log("123", item)}</>
+              <Flex flexDirection="row" justifyContent="space-between">
+                <Text color="green.900">{item.name}</Text>
+                <Text>RM {item.price}</Text>
+              </Flex>
+            </Box>
+          );
+        })}
+      </Box>
+    </Box>
   );
 }
 
