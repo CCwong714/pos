@@ -15,9 +15,10 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isEmpty, setEmpty] = useState(false);
+  const [isStart, setIsStart] = useState(false);
   const [click, setClick] = useState(false);
   const [isError, setError] = useState(false);
-  const [isSuccess, setSuccess] = useState(false);
+  // const [isSuccess, setSuccess] = useState(false);
   const handleUsernameChange = (e: any) => setUsername(e.target.value);
   const handlePasswordChange = (e: any) => setPassword(e.target.value);
   const navigate = useNavigate();
@@ -28,24 +29,64 @@ const Login = () => {
     if (username === "" || password === "") {
       setEmpty(true);
     }
-  }, [username, password]);
+  }, [username, password, click]);
+
+  function handleLogin() {
+    if (click) {
+      for (let index = 0; index < LoginData.length; index++) {
+        if (
+          username === LoginData[index].username &&
+          password === LoginData[index].password
+        ) {
+          console.log("SUCCESS");
+          // setSuccess(true);
+          setError(false);
+          navigate("/MainMenu");
+          setClick(false);
+          setIsStart(true);
+          break;
+        } else {
+          console.log("FAILED");
+          setError(true);
+          setUsername("");
+          setPassword("");
+          setIsStart(true);
+          setClick(false);
+        }
+      }
+    }
+  }
 
   useEffect(() => {
-    for (let index = 0; index < LoginData.length; index++) {
-      if (
-        username === LoginData[index].username &&
-        password === LoginData[index].password
-      ) {
-        console.log("SUCCESS");
-        setSuccess(true);
-        setError(false);
-        navigate("/MainMenu");
-        break;
-      } else {
-        console.log("FAILED");
-        setError(true);
+    if (click) {
+      for (let index = 0; index < LoginData.length; index++) {
+        if (
+          username === LoginData[index].username &&
+          password === LoginData[index].password
+        ) {
+          console.log("SUCCESS");
+          setError(false);
+          navigate("/MainMenu");
+          setClick(false);
+          setIsStart(true);
+          break;
+        } else if (
+          username !== LoginData[index].username &&
+          password !== LoginData[index].password &&
+          username !== "" &&
+          password !== ""
+        ) {
+          console.log("FAILED");
+          setError(true);
+          setUsername("");
+          setPassword("");
+          setClick(false);
+          setEmpty(false);
+        } else {
+          setIsStart(true);
+          setClick(false);
+        }
       }
-      setClick(false);
     }
   }, [click]);
 
@@ -65,38 +106,39 @@ const Login = () => {
         alignItems={"center"}
         justifyContent={"center"}
       >
-        <FormControl isRequired isInvalid={isError}>
+        <FormControl isRequired isInvalid={isStart || isError}>
           <FormLabel>Username</FormLabel>
           <Input value={username} onChange={handleUsernameChange} />
         </FormControl>
         <Spacer />
-        <FormControl isRequired isInvalid={isError}>
+        <FormControl isRequired isInvalid={isStart || isError}>
           <FormLabel>Password</FormLabel>
           <Input value={password} onChange={handlePasswordChange} />
         </FormControl>
         <Spacer />
-        {isEmpty ? (
+        {isError ? (
           <Text color={"red"} fontSize={"14px"}>
-            Username and password is required.
+            Wrong username or password.
           </Text>
         ) : (
-          isError && (
+          isStart &&
+          isEmpty && (
             <Text color={"red"} fontSize={"14px"}>
-              Wrong username or password.
+              Username and password is required.
             </Text>
           )
         )}
         <Spacer />
-        <Button colorScheme={"gray"}>
-          <Text
-            color={"#000000"}
-            onClick={() => {
-              setClick(true);
-              setEmpty(false);
-            }}
-          >
-            Login
-          </Text>
+        <Button
+          colorScheme={"gray"}
+          onClick={() => {
+            setClick(true);
+            // setTimeout(() => {
+            //   handleLogin();
+            // }, 100);
+          }}
+        >
+          <Text color={"#000000"}>Login</Text>
         </Button>
       </Flex>
     </Flex>
