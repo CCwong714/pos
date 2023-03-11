@@ -9,7 +9,7 @@ const Dashboard = () => {
         </Text>
       </Box>
 
-      <Box height={"80%"} bg={"#000000"}>
+      <Box height={"100%"} bg={"#000000"}>
         <Text color={"#FFFFFF"} textAlign={"center"}>
           Order Details
         </Text>
